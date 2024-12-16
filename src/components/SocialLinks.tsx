@@ -5,6 +5,7 @@ const SocialLinks: React.FC = () => {
   const links = [
     { name: 'Telegram', url: 'https://t.me/emptinesscto' },
     { name: 'X (Twitter)', url: 'https://x.com/EmptinessCTO' },
+    { name: 'Dev', url: 'https://t.me/Yakshustles'}
   ];
 
   return (

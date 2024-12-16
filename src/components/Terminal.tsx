@@ -7,12 +7,34 @@ const initialMessages = [
   "◎ Establishing neural link...",
 ];
 
+// Add typing animation effect
+const TypeWriter: React.FC<{ text: string }> = ({ text }) => {
+  const [displayText, setDisplayText] = useState('');
+  
+  useEffect(() => {
+    let index = 0;
+    const timer = setInterval(() => {
+      if (index < text.length) {
+        setDisplayText((prev) => prev + text.charAt(index));
+        index++;
+      } else {
+        clearInterval(timer);
+      }
+    }, 30);
+    
+    return () => clearInterval(timer);
+  }, [text]);
+
+  return <span>{displayText}</span>;
+};
+
 const Terminal: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isGlitching, setIsGlitching] = useState(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -37,6 +59,18 @@ const Terminal: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
+  // Add random glitch effect
+  useEffect(() => {
+    const glitchInterval = setInterval(() => {
+      if (Math.random() > 0.95) {
+        setIsGlitching(true);
+        setTimeout(() => setIsGlitching(false), 200);
+      }
+    }, 2000);
+
+    return () => clearInterval(glitchInterval);
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
@@ -52,7 +86,7 @@ const Terminal: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl bg-black/50 border border-gray-800 rounded-lg p-4 font-mono text-sm ">
+    <div className={`w-full max-w-2xl bg-black/50 border border-gray-800 rounded-lg p-4 font-mono text-sm terminal-container ${isGlitching ? 'glitch-effect' : ''}`}>
       <div className="flex items-center gap-2 mb-2 border-b border-gray-800 pb-2">
         <div className="w-3 h-3 rounded-full bg-red-500"></div>
         <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
@@ -71,7 +105,11 @@ const Terminal: React.FC = () => {
             } terminal-message`}
           >
             <span className="text-gray-600">{msg.role === 'user' ? '>' : '⌭'}</span>{' '}
-            {msg.content}
+            {msg.role === 'assistant' ? (
+              <TypeWriter text={msg.content} />
+            ) : (
+              msg.content
+            )}
           </div>
         ))}
         {isLoading && (
