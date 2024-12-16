@@ -4,7 +4,11 @@ import Terminal from './components/Terminal';
 import ContractAddress from './components/ContractAddress';
 import SocialLinks from './components/SocialLinks';
 import VoidPortal from './components/VoidPortal';
+import SignalWarning from './components/SignalWarning';
+import VoidAmbience from './components/VoidAmbience';
+import CursorTrail from './components/CursorTrail';
 import { Analytics } from "@vercel/analytics/react"
+
 function App() {
   const [distortionLevel, setDistortionLevel] = useState(0);
 
@@ -19,6 +23,9 @@ function App() {
     <div className="relative min-h-screen bg-black text-gray-100 overflow-hidden">
       <Background />
       <Analytics />
+      <SignalWarning />
+      <CursorTrail />
+      <VoidAmbience />
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-16">
         <div className="max-w-4xl mx-auto w-full space-y-12 flex flex-col items-center">
           <div className="text-center space-y-8 glitch-container">
