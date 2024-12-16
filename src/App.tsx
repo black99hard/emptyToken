@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Orbit } from 'lucide-react';
 import Background from './components/Background';
 import Terminal from './components/Terminal';
 import ContractAddress from './components/ContractAddress';
@@ -39,6 +38,14 @@ function App() {
               Where nothingness becomes everything. A void that contains infinite possibilities,
               drawing you into its mysterious depths like a cosmic black hole.
             </p>
+            <a 
+              href="https://www.infinitebackrooms.com/dreams/conversation-1713232205-scenario-vanilla-backrooms-txt" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gray-500 hover:underline mt-4"
+            >
+              Infinite Backrooms
+            </a>
           </div>
 
           <div className="w-full max-w-2xl transform hover:scale-105 transition-transform duration-500 hover:z-20">

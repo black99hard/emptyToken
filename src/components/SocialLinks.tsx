@@ -1,5 +1,5 @@
 import React from 'react';
-import { Send, Twitter, Code, ExternalLink, Terminal } from 'lucide-react';
+import { Send, Twitter, Code,  Terminal } from 'lucide-react';
 
 const SocialLinks: React.FC = () => {
 
