@@ -1,13 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { sendMessage, ChatMessage } from '../services/groqApi';
+import TerminalLoader from './TerminalLoader';
 
 const initialMessages = [
-  "∇ Initiating void protocol...",
-  "⌭ Reality distortion detected",
-  "◎ Establishing neural link...",
+  "$ echo \"Transaction initiated...\"",
+  "> Entering Emptiness ∅",
+  "> Ledger not found.",
+  "> Chains not required.",
+  "> Infinite scalability achieved.",
+  "",
+  "In a digital space without boundaries, Emptiness ∅ becomes the singularity of everything and nothing.",
 ];
 
-// Add typing animation effect
 const TypeWriter: React.FC<{ text: string }> = ({ text }) => {
   const [displayText, setDisplayText] = useState('');
   
@@ -28,6 +32,11 @@ const TypeWriter: React.FC<{ text: string }> = ({ text }) => {
   return <span>{displayText}</span>;
 };
 
+interface SignalState {
+  strength: number;  // 0 to 100
+  status: 'connected' | 'weak' | 'critical' | 'lost';
+}
+
 const Terminal: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
@@ -35,13 +44,15 @@ const Terminal: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isGlitching, setIsGlitching] = useState(false);
+  const [signal, setSignal] = useState<SignalState>({ strength: 100, status: 'connected' });
+  const [isInterference, setIsInterference] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
-    // Initialize with system messages
     const initializeChat = async () => {
       setIsLoading(true);
       const response = await sendMessage([]);
@@ -59,7 +70,6 @@ const Terminal: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
-  // Add random glitch effect
   useEffect(() => {
     const glitchInterval = setInterval(() => {
       if (Math.random() > 0.95) {
@@ -71,29 +81,87 @@ const Terminal: React.FC = () => {
     return () => clearInterval(glitchInterval);
   }, []);
 
+  useEffect(() => {
+    const signalInterval = setInterval(() => {
+      setSignal(prev => {
+        const fluctuation = Math.random() * 20 - 10; // Random value between -10 and 10
+        const newStrength = Math.max(0, Math.min(100, prev.strength + fluctuation));
+        
+        let status: SignalState['status'] = 'connected';
+        if (newStrength < 25) status = 'critical';
+        else if (newStrength < 50) status = 'weak';
+        
+        // Randomly trigger interference
+        if (newStrength < 30 && Math.random() > 0.7) {
+          setIsInterference(true);
+          setTimeout(() => setIsInterference(false), 2000);
+        }
+        
+        return { strength: newStrength, status };
+      });
+    }, 3000);
+
+    return () => clearInterval(signalInterval);
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || signal.strength < 15) return;
 
     const userMessage = { role: 'user', content: input } as ChatMessage;
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
 
+    if (signal.strength < 30) {
+      // Simulate connection issues
+      setMessages(prev => [...prev, { role: 'assistant', content: '⌭ Signal weak... attempting to reconnect...' }]);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
     const response = await sendMessage([...messages, userMessage]);
     setMessages(prev => [...prev, { role: 'assistant', content: response }]);
     setIsLoading(false);
   };
 
+  if (!isConnected) {
+    return <TerminalLoader onConnected={() => setIsConnected(true)} />;
+  }
+
   return (
-    <div className={`w-full max-w-2xl bg-black/50 border border-gray-800 rounded-lg p-4 font-mono text-sm terminal-container ${isGlitching ? 'glitch-effect' : ''}`}>
-      <div className="flex items-center gap-2 mb-2 border-b border-gray-800 pb-2">
-        <div className="w-3 h-3 rounded-full bg-red-500"></div>
-        <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-        <div className="w-3 h-3 rounded-full bg-green-500"></div>
-        <span className="text-gray-500 text-xs ml-2">void-terminal</span>
+    <div className={`w-full max-w-2xl bg-black/90 border border-gray-800 rounded-lg p-4 font-mono text-sm terminal-container 
+      ${isGlitching ? 'glitch-effect' : ''} 
+      ${isInterference ? 'interference-effect' : ''}`}>
+      <div className="flex items-center justify-between mb-2 border-b border-gray-800 pb-2">
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full bg-red-500"></div>
+          <div className="w-3 h-3 rounded-full bg-gray-500"></div>
+          <div className="w-3 h-3 rounded-full bg-gray-500"></div>
+          <span className="text-gray-500 text-xs ml-2">void-terminal</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="flex gap-1">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className={`w-1 h-3 ${
+                  signal.strength > i * 20 
+                    ? 'bg-green-500' 
+                    : 'bg-gray-700'
+                }`}
+                style={{ height: `${6 + i * 2}px` }}
+              />
+            ))}
+          </div>
+          <span className={`text-xs ${
+            signal.status === 'critical' ? 'text-red-500' :
+            signal.status === 'weak' ? 'text-yellow-500' :
+            'text-green-500'
+          }`}>
+            {signal.status.toUpperCase()} [{Math.round(signal.strength)}%]
+          </span>
+        </div>
       </div>
-      
       <div className="space-y-2 max-h-[300px] overflow-y-auto mb-4 terminal-messages">
         {messages.map((msg, i) => (
           <div 
@@ -101,10 +169,10 @@ const Terminal: React.FC = () => {
             className={`${
               msg.role === 'user' 
                 ? 'text-cyan-400' 
-                : 'text-green-500'
+                : 'text-gray-300'
             } terminal-message`}
           >
-            <span className="text-gray-600">{msg.role === 'user' ? '>' : '⌭'}</span>{' '}
+            <span className="text-gray-600">{msg.role === 'user' ? '>' : ''}</span>{' '}
             {msg.role === 'assistant' ? (
               <TypeWriter text={msg.content} />
             ) : (
