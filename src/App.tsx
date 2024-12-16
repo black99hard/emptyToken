@@ -38,14 +38,12 @@ function App() {
               Where nothingness becomes everything. A void that contains infinite possibilities,
               drawing you into its mysterious depths like a cosmic black hole.
             </p>
-            <a 
-              href="https://www.infinitebackrooms.com/dreams/conversation-1713232205-scenario-vanilla-backrooms-txt" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-gray-500 hover:underline mt-4"
+            <button 
+              onClick={() => window.open("https://www.infinitebackrooms.com/dreams/conversation-1713232205-scenario-vanilla-backrooms-txt", "_blank", "noopener noreferrer")}
+              className="bg-gradient-to-r from-gray-100 to-gray-500 text-black font-bold py-3 px-6 rounded-lg hover:underline mt-4 text-xl shadow-lg transform transition-transform duration-300 hover:scale-105"
             >
               Infinite Backrooms
-            </a>
+            </button>
           </div>
 
           <div className="w-full max-w-2xl transform hover:scale-105 transition-transform duration-500 hover:z-20">
