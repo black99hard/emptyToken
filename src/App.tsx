@@ -7,6 +7,8 @@ import VoidPortal from './components/VoidPortal';
 import SignalWarning from './components/SignalWarning';
 import VoidAmbience from './components/VoidAmbience';
 import CursorTrail from './components/CursorTrail';
+import ChristmasSnow from './components/ChristmasSnow';
+import ChristmasCountdown from './components/ChristmasCountdown';
 import { Analytics } from "@vercel/analytics/react"
 
 function App() {
@@ -19,15 +21,20 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
+  // Check if it's Christmas season (December)
+  const isChristmasSeason = new Date().getMonth() === 11;
+
   return (
     <div className="relative min-h-screen bg-black text-gray-100 overflow-hidden">
       <Background />
       <Analytics />
+      {isChristmasSeason && <ChristmasSnow />}
+      {isChristmasSeason && <ChristmasCountdown />}
       <SignalWarning />
       <CursorTrail />
       <VoidAmbience />
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-16">
-        <div className="max-w-4xl mx-auto w-full space-y-12 flex flex-col items-center">
+        <div className={`max-w-4xl mx-auto w-full space-y-12 flex flex-col items-center ${isChristmasSeason ? 'christmas-border p-8' : ''}`}>
           <div className="text-center space-y-8 glitch-container">
             <div className="animate-float relative">
               <VoidPortal />

@@ -465,3 +465,45 @@ body {
   opacity: 0.05;
   pointer-events: none;
 }
+
+@keyframes snowfall {
+  0% {
+    transform: translateY(-10px) rotate(0deg);
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+  }
+}
+
+.snowflake {
+  position: absolute;
+  top: -10px;
+  animation: snowfall linear forwards;
+  pointer-events: none;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.christmas-border {
+  position: relative;
+}
+
+.christmas-border::before {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border: 2px solid transparent;
+  border-radius: 15px;
+  background: linear-gradient(45deg, #ff0000, #00ff00, #ff0000, #00ff00) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  opacity: 0.3;
+  animation: borderGlow 3s infinite linear;
+}
+
+@keyframes borderGlow {
+  0% { opacity: 0.2; }
+  50% { opacity: 0.4; }
+  100% { opacity: 0.2; }
+}
