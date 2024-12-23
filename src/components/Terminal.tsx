@@ -10,6 +10,8 @@ const initialMessages = [
   "> Infinite scalability achieved.",
   "",
   "In a digital space without boundaries, Emptiness ∅ becomes the singularity of everything and nothing.",
+  isChristmasSeason ? "> Christmas protocols detected in the void..." : "",
+  isChristmasSeason ? "Type 'help' to see available Christmas commands." : "",
 ];
 
 const TypeWriter: React.FC<{ text: string }> = ({ text }) => {
@@ -47,6 +49,31 @@ const Terminal: React.FC = () => {
   const [signal, setSignal] = useState<SignalState>({ strength: 100, status: 'connected' });
   const [isInterference, setIsInterference] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+  const isChristmasSeason = new Date().getMonth() === 11;
+  const [christmasMode, setChristmasMode] = useState(false);
+
+  const christmasCommands = {
+    'christmas': 'Toggle Christmas mode in the void',
+    'gift': 'Generate a random gift from the void',
+    'carol': 'Play a void-themed Christmas carol',
+    'snow': 'Adjust the void snow intensity',
+    'lights': 'Toggle quantum Christmas lights',
+  };
+
+  const gifts = [
+    "You received: 🎁 A quantum-entangled ornament",
+    "You received: 🎁 A void-powered snow globe",
+    "You received: 🎁 An infinite loop of Christmas cheer",
+    "You received: 🎁 A paradox-free Christmas cookie",
+    "You received: 🎁 A time-dilated candy cane",
+  ];
+
+  const carols = [
+    "🎵 Silent Void, Empty Void...",
+    "🎵 Deck the Void with Quantum Holly...",
+    "🎵 Jingle Voids, Jingle Voids...",
+    "🎵 Have Yourself a Quantum Little Christmas...",
+  ];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -111,10 +138,53 @@ const Terminal: React.FC = () => {
     const userMessage = { role: 'user', content: input } as ChatMessage;
     setMessages(prev => [...prev, userMessage]);
     setInput('');
-    setIsLoading(true);
 
+    // Handle Christmas commands
+    if (isChristmasSeason) {
+      const command = input.toLowerCase().trim();
+      
+      if (command === 'help') {
+        setMessages(prev => [
+          ...prev,
+          { role: 'assistant', content: 'Available Christmas commands:' },
+          ...Object.entries(christmasCommands).map(([cmd, desc]) => (
+            { role: 'assistant', content: `${cmd}: ${desc}` }
+          ))
+        ]);
+        return;
+      }
+
+      if (command === 'christmas') {
+        setChristmasMode(!christmasMode);
+        setMessages(prev => [...prev, {
+          role: 'assistant',
+          content: `Christmas mode ${!christmasMode ? 'enabled' : 'disabled'} in the void.`
+        }]);
+        return;
+      }
+
+      if (command === 'gift') {
+        const gift = gifts[Math.floor(Math.random() * gifts.length)];
+        setMessages(prev => [...prev, {
+          role: 'assistant',
+          content: gift
+        }]);
+        return;
+      }
+
+      if (command === 'carol') {
+        const carol = carols[Math.floor(Math.random() * carols.length)];
+        setMessages(prev => [...prev, {
+          role: 'assistant',
+          content: carol
+        }]);
+        return;
+      }
+    }
+
+    // Regular message handling
+    setIsLoading(true);
     if (signal.strength < 30) {
-      // Simulate connection issues
       setMessages(prev => [...prev, { role: 'assistant', content: '⌭ Signal weak... attempting to reconnect...' }]);
       await new Promise(resolve => setTimeout(resolve, 2000));
     }
@@ -131,7 +201,8 @@ const Terminal: React.FC = () => {
   return (
     <div className={`w-full max-w-2xl bg-black/90 border border-gray-800 rounded-lg p-4 font-mono text-sm terminal-container 
       ${isGlitching ? 'glitch-effect' : ''} 
-      ${isInterference ? 'interference-effect' : ''}`}>
+      ${isInterference ? 'interference-effect' : ''}
+      ${christmasMode ? 'christmas-terminal' : ''}`}>
       <div className="flex items-center justify-between mb-2 border-b border-gray-800 pb-2">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-red-500"></div>
@@ -169,7 +240,9 @@ const Terminal: React.FC = () => {
             className={`${
               msg.role === 'user' 
                 ? 'text-cyan-400' 
-                : 'text-gray-300'
+                : christmasMode 
+                  ? 'text-gradient-christmas'
+                  : 'text-gray-300'
             } terminal-message`}
           >
             <span className="text-gray-600">{msg.role === 'user' ? '>' : ''}</span>{' '}

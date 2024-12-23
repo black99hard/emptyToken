@@ -507,3 +507,133 @@ body {
   50% { opacity: 0.4; }
   100% { opacity: 0.2; }
 }
+
+/* Enhanced Christmas Terminal Effects */
+.christmas-terminal {
+  position: relative;
+  overflow: hidden;
+  border-image: linear-gradient(
+    45deg,
+    rgba(255, 0, 0, 0.5),
+    rgba(0, 255, 0, 0.5),
+    rgba(255, 215, 0, 0.5)
+  ) 1;
+  animation: christmasBorder 4s linear infinite;
+}
+
+.christmas-terminal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(45deg, 
+      rgba(255, 0, 0, 0.05),
+      rgba(0, 255, 0, 0.05),
+      rgba(255, 0, 0, 0.05)
+    );
+  animation: christmasGlow 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes christmasBorder {
+  0% { border-image-source: linear-gradient(0deg, rgba(255, 0, 0, 0.5), rgba(0, 255, 0, 0.5)); }
+  50% { border-image-source: linear-gradient(180deg, rgba(0, 255, 0, 0.5), rgba(255, 0, 0, 0.5)); }
+  100% { border-image-source: linear-gradient(360deg, rgba(255, 0, 0, 0.5), rgba(0, 255, 0, 0.5)); }
+}
+
+@keyframes christmasGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.5; }
+}
+
+.text-gradient-christmas {
+  background: linear-gradient(
+    45deg,
+    #ff0000,
+    #00ff00,
+    #ff0000,
+    #00ff00
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: christmasGradient 4s ease infinite;
+  text-shadow: 
+    0 0 5px rgba(255, 0, 0, 0.3),
+    0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+@keyframes christmasGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Enhanced Snowflake Effects */
+.snowflake {
+  position: absolute;
+  top: -10px;
+  animation: enhancedSnowfall linear forwards;
+  pointer-events: none;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+  transform-origin: center;
+}
+
+@keyframes enhancedSnowfall {
+  0% {
+    transform: translateY(-10px) rotate(0deg) scale(1);
+    opacity: 0;
+  }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% {
+    transform: translateY(100vh) rotate(360deg) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Christmas Particle Effects */
+.christmas-particle {
+  position: absolute;
+  pointer-events: none;
+  animation: particleFade 2s ease-out forwards;
+}
+
+@keyframes particleFade {
+  0% { transform: scale(1) rotate(0deg); opacity: 1; }
+  100% { transform: scale(0) rotate(180deg); opacity: 0; }
+}
+
+/* Enhanced Christmas Border */
+.christmas-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 0, 0, 0.5),
+    rgba(0, 255, 0, 0.5),
+    rgba(255, 215, 0, 0.3),
+    rgba(255, 0, 0, 0.5)
+  );
+  border-radius: inherit;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask: 
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: christmasBorderGlow 4s linear infinite;
+}
+
+@keyframes christmasBorderGlow {
+  0% { filter: hue-rotate(0deg) brightness(1); }
+  50% { filter: hue-rotate(180deg) brightness(1.2); }
+  100% { filter: hue-rotate(360deg) brightness(1); }
+}
