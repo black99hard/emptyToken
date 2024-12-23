@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { sendMessage, ChatMessage } from '../services/groqApi';
 import TerminalLoader from './TerminalLoader';
 
-const initialMessages = [
+const baseInitialMessages = [
   "$ echo \"Transaction initiated...\"",
   "> Entering Emptiness ∅",
   "> Ledger not found.",
@@ -10,8 +10,6 @@ const initialMessages = [
   "> Infinite scalability achieved.",
   "",
   "In a digital space without boundaries, Emptiness ∅ becomes the singularity of everything and nothing.",
-  isChristmasSeason ? "> Christmas protocols detected in the void..." : "",
-  isChristmasSeason ? "Type 'help' to see available Christmas commands." : "",
 ];
 
 const TypeWriter: React.FC<{ text: string }> = ({ text }) => {
@@ -51,6 +49,14 @@ const Terminal: React.FC = () => {
   const [isConnected, setIsConnected] = useState(false);
   const isChristmasSeason = new Date().getMonth() === 11;
   const [christmasMode, setChristmasMode] = useState(false);
+
+  const initialMessages = [
+    ...baseInitialMessages,
+    ...(isChristmasSeason ? [
+      "> Christmas protocols detected in the void...",
+      "Type 'help' to see available Christmas commands."
+    ] : [])
+  ];
 
   const christmasCommands = {
     'christmas': 'Toggle Christmas mode in the void',

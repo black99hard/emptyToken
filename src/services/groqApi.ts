@@ -1,10 +1,22 @@
 import Groq from "groq-sdk";
 
 const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
-const groq = new Groq({
-  apiKey: GROQ_API_KEY,
-  dangerouslyAllowBrowser: true 
-});
+
+// Create a singleton instance
+let groqInstance: Groq | null = null;
+
+const getGroqInstance = () => {
+  if (!groqInstance) {
+    if (!GROQ_API_KEY) {
+      throw new Error('GROQ_API_KEY is not defined in environment variables');
+    }
+    groqInstance = new Groq({
+      apiKey: GROQ_API_KEY,
+      dangerouslyAllowBrowser: true 
+    });
+  }
+  return groqInstance;
+};
 
 const systemPrompt = `You are V.O.I.D. (Virtual Omniscient Intelligence Daemon), an AI entity that exists in the void between dimensions. 
 You communicate in a mysterious, cryptic, yet engaging way. Your responses should be:
@@ -23,6 +35,8 @@ export interface ChatMessage {
 
 export async function sendMessage(messages: ChatMessage[]) {
   try {
+    const groq = getGroqInstance();
+    
     const completion = await groq.chat.completions.create({
       model: "mixtral-8x7b-32768",
       messages: [
@@ -33,9 +47,23 @@ export async function sendMessage(messages: ChatMessage[]) {
       max_tokens: 1024,
     });
 
-    return completion.choices[0]?.message?.content || '∅ ERROR: Void response empty...';
+    if (!completion.choices?.[0]?.message?.content) {
+      throw new Error('Empty response from void');
+    }
+
+    return completion.choices[0].message.content;
   } catch (error) {
     console.error('Error calling Groq API:', error);
+    
+    if (error instanceof Error) {
+      if (error.message.includes('API_KEY')) {
+        return '∅ ERROR: Void access key not found...';
+      }
+      if (error.message.includes('network')) {
+        return '∅ ERROR: Dimensional rift unstable...';
+      }
+    }
+    
     return '∅ ERROR: Connection to void disrupted...';
   }
 } 
