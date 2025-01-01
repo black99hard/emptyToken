@@ -28,8 +28,8 @@ function App() {
     <div className="relative min-h-screen bg-black text-gray-100 overflow-hidden">
       <Background />
       <Analytics />
-      {isChristmasSeason && <ChristmasSnow />}
-      {isChristmasSeason && <ChristmasCountdown />}
+
+
       <SignalWarning />
       <CursorTrail />
       <VoidAmbience />
@@ -37,7 +37,7 @@ function App() {
         <div className={`max-w-4xl mx-auto w-full space-y-12 flex flex-col items-center ${isChristmasSeason ? 'christmas-border p-8' : ''}`}>
           <div className="text-center space-y-8 glitch-container">
             <div className="animate-float relative">
-              <VoidPortal />
+          
               <h1 className="text-9xl md:text-8xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-100 to-gray-500 tracking-tighter  "
                  >
                 ∅
